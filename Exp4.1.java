@@ -1,18 +1,96 @@
 Experiment 4.1: Employee Management System
 
-The Employee Management System is a simple Java-based application that uses ArrayList to manage employee records. The system allows users to perform the following operations:
+  
+import java.util.*;
+class Employee {
+    int id;
+    String name;
+    double salary;
+    Employee(int id, String name, double salary) {
+        this.id = id;
+        this.name = name;
+        this.salary = salary;
+    }
+    public String toString() {
+        return "ID: " + id + ", Name: " + name + ", Salary: " + salary;
+    }
+}
+class EmployeeManagementSystem {
+    private List<Employee> employees = new ArrayList<>();
 
-Add Employee → Store Employee ID, Name, and Salary.
+    public void addEmployee(int id, String name, double salary) {
+        for (Employee emp : employees) {
+            if (emp.id == id) {
+                System.out.println("Error: Employee with ID " + id + " already exists.");
+                return;
+            }
+        }
+        employees.add(new Employee(id, name, salary));
+        System.out.println("Employee Added: ID=" + id + ", Name=" + name + ", Salary=" + salary);
+    }
 
-Update Employee → Modify employee details based on their ID.
+    public void updateEmployee(int id, double newSalary) {
+        for (Employee emp : employees) {
+            if (emp.id == id) {
+                emp.salary = newSalary;
+                System.out.println("Employee ID " + id + " updated successfully.");
+                return;
+            }
+        }
+        System.out.println("Error: Employee ID " + id + " not found.");
+    }
 
-Remove Employee → Delete an employee using their ID.
+    public void removeEmployee(int id) {
+        Iterator<Employee> iterator = employees.iterator();
+        while (iterator.hasNext()) {
+            Employee emp = iterator.next();
+            if (emp.id == id) {
+                iterator.remove();
+                System.out.println("Employee ID " + id + " removed successfully.");
+                return;
+            }
+        }
+        System.out.println("Error: Employee ID " + id + " not found.");
+    }
 
-Search Employee → Find employees by ID or Name.
+    public void searchEmployeeById(int id) {
+        for (Employee emp : employees) {
+            if (emp.id == id) {
+                System.out.println("Employee Found: " + emp);
+                return;
+            }
+        }
+        System.out.println("Error: Employee ID " + id + " not found.");
+    }
 
-Display All Employees → Show a complete list of employees.
+    public void displayEmployees() {
+        if (employees.isEmpty()) {
+            System.out.println("No employees found.");
+        } else {
+            for (Employee emp : employees) {
+                System.out.println(emp);
+            }
+        }
+    }
+}
+public class EmployeeManagementTest {
+    public static void main(String[] args) {
+        EmployeeManagementSystem ems = new EmployeeManagementSystem();
 
-Test Cases
+        ems.displayEmployees();
+        ems.addEmployee(101, "Anish", 50000);
+        ems.addEmployee(102, "Bobby", 60000);
+        ems.updateEmployee(101, 55000);
+        ems.searchEmployeeById(102);
+        ems.removeEmployee(101);
+        ems.displayEmployees();
+        ems.addEmployee(101, "Charlie", 70000);
+    }
+}
+
+
+
+Test Cases:
 
 Test Case 1: Adding Employees (No Employees Initially)
 Display Employees
@@ -56,5 +134,3 @@ Input:
 Add Employee (ID=101, Name="Charlie", Salary=70000)
 Expected Output:
 Error: Employee with ID 101 already exists.
-
-
