@@ -1,29 +1,78 @@
 Experiment 4.2: Card Collection System
 
-Objective:
-Develop a Java program that collects and stores playing cards to help users find all the cards of a given symbol (suit).
-The program should utilize the Collection interface (such as ArrayList, HashSet, or HashMap) to manage the card data efficiently.
 
-Understanding the Problem Statement
+  
+import java.util.*;
 
-1. Card Structure:
-Each card consists of a symbol (suit) and a value (rank).
+class CardCollectionSystem {
+    private Map<String, HashSet<String>> cardMap;
 
-Example card representations:
-Ace of Spades
-King of Hearts
-10 of Diamonds
-5 of Clubs
+    public CardCollectionSystem() {
+        cardMap = new HashMap<>();
+    }
 
-2. Operations Required:
-Add Cards → Store card details in a collection.
-Find Cards by Symbol (Suit) → Retrieve all cards belonging to a specific suit (e.g., all "Hearts").
-Display All Cards → Show all stored cards.
+    public void addCard(String suit, String rank) {
+        cardMap.putIfAbsent(suit, new HashSet<>());
+        if (!cardMap.get(suit).add(rank)) {
+            System.out.println("Error: Card \"" + rank + " of " + suit + "\" already exists.");
+        } else {
+            System.out.println("Card added: " + rank + " of " + suit);
+        }
+    }
 
-3. Collections Usage:
-ArrayList: To store cards in an ordered manner.
-HashSet: To prevent duplicate cards.
-HashMap<String, List<Card>>: To organize cards based on suits for faster lookup.
+    public void findCardsBySuit(String suit) {
+        if (cardMap.containsKey(suit) && !cardMap.get(suit).isEmpty()) {
+            System.out.println("Cards of " + suit + ": " + cardMap.get(suit));
+        } else {
+            System.out.println("No cards found for " + suit + ".");
+        }
+    }
+
+    public void displayAllCards() {
+        if (cardMap.isEmpty()) {
+            System.out.println("No cards found.");
+            return;
+        }
+        for (String suit : cardMap.keySet()) {
+            for (String rank : cardMap.get(suit)) {
+                System.out.println(rank + " of " + suit);
+            }
+        }
+    }
+
+    public void removeCard(String suit, String rank) {
+        if (cardMap.containsKey(suit) && cardMap.get(suit).remove(rank)) {
+            System.out.println("Card removed: " + rank + " of " + suit);
+            if (cardMap.get(suit).isEmpty()) {
+                cardMap.remove(suit);
+            }
+        } else {
+            System.out.println("Card \"" + rank + " of " + suit + "\" not found.");
+        }
+    }
+
+    public static void main(String[] args) {
+        CardCollectionSystem system = new CardCollectionSystem();
+
+        system.displayAllCards();
+
+        system.addCard("Spades", "Ace"); 
+        system.addCard("Hearts", "King");
+        system.addCard("Diamonds", "10");
+        system.addCard("Clubs", "5");
+
+        system.findCardsBySuit("Hearts");
+        system.findCardsBySuit("Diamonds"); 
+
+        system.displayAllCards();
+
+        system.addCard("Hearts", "King");
+
+        system.removeCard("Diamonds", "10");
+        system.displayAllCards();
+    }
+}
+
 
 
 Test Cases
